@@ -36,6 +36,22 @@ function! <sid>PrevBegin()
     return curline + 1
 endfunction
 
+function! <sid>DeleteSurroundEnvironment()
+    let l:beg = <sid>PrevBegin()
+    let l:end = <sid>NextEnd()
+    let l:begline = getline(l:beg)
+    execute l:end."d"
+    normal! k
+    execute l:beg."d"
+    execute (l:end-2)."mark ]"
+    echo l:begline
+endf
+
+nnoremap cse :execute('normal! '.<sid>PrevBegin().'G')<CR>0f}cT{
+nnoremap dse :call <sid>DeleteSurroundEnvironment()<CR>
+"cursor(execute('normal! '.<sid>NextEnd().'G')<CR>execute
+" call cursor(<sid>NextEnd(),0)<CR>dd:call cursor(<sid>PrevBegin(),0)<CR>dd
+
 function! <sid>SelectInEnvironment(surround)
     let start = <sid>PrevBegin()
     let end = <sid>NextEnd()
@@ -108,27 +124,4 @@ function! SelectInMath(surround)
     else
         call cursor(nextLine, nextCol - 1)
     end
-endfunction
-
-" Use % to jump between begin/end
-function! MatchedBlock()
-    if getline(line(".")) =~ '.*\\begin.*$'
-        normal! j
-        call cursor(NextEnd(), 0)
-    elseif getline(line(".")) =~ '.*\\end.*$'
-        normal! k
-        call cursor(PrevBegin(), 0)
-    else
-        normal! %
-    end
-endfunction
-
-function! VisualMatchedBlock()
-    let start = line(".")
-    call MatchedBlock()
-    let end = line(".")
-
-    call cursor(start, 0)
-    exec "normal!" . visualmode()
-    call cursor(end, 0)
 endfunction

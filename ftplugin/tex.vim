@@ -9,9 +9,6 @@ omap <buffer> iq :normal viq<CR>
 vmap <buffer> aq <ESC>?``<CR>v/''<CR>l
 omap <buffer> aq :normal vaq<CR>
 
-map <buffer> % :call MatchedBlock()<CR>
-vmap <buffer> % :call VisualMatchedBlock()<CR>
-
 " Mathematica mappings
 imap <buffer> <C-6> ^{}
 imap <buffer> <C-^> ^{}
